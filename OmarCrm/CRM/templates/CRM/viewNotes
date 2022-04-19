@@ -1,0 +1,14 @@
+CREATE VIEW [CustomerAccountBalance] as 
+select a.transactionDate , b.customerId , b.customerName ,  a.paymentType ,  a.paymentRef , ' Project ' as credit ,  a.paymentAmount as debit 
+from crm_Paymentsmodel a , crm_customerInfomodel b
+where a.customerId_id = b.customerId
+union ALL
+SELECT   a.assignDate ,  a.customerId_id , c.customerName,   b.projectName , '', b.price as credit , '' as debit 
+from crm_AssignProjectmodel a , crm_ProjectInfomodel b , crm_customerInfomodel c
+where a.projectId_id = b.projectId
+and a.customerId_id = c.customerId
+union all
+SELECT   a.startDate ,  a.customerId_id , c.customerName,   b.projectName||"-"||a.contractPeriod , 'Contract', a.price as credit , '' as debit 
+from crm_projectContractmodel a , crm_ProjectInfomodel b , crm_customerInfomodel c
+where a.projectId_id = b.projectId
+and a.customerId_id = c.customerId
