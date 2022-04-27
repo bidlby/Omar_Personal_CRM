@@ -1,0 +1,31 @@
+{% include 'CRM/base.html' %}
+{% include 'CRM/navbar.html' %}
+
+Customer Information:
+<br>
+<label for="Name">Customer Name</label>
+{{customerProfile.0.customerName}} <br>
+{{customerProfile.0.country}} <br>
+{{customerProfile.0.address}} <br>
+{{customerProfile.0.mobileNumber}} <br>
+{{customerProfile.0.workNumber}} <br>
+{{customerProfile.0.gd1}} <br>
+
+
+<h2>user filter</h2>
+{% for x in q1 %}
+
+<li>{{x.customerId}} - {{x.userLogin}}</li>
+
+{% endfor %}
+
+<br>
+
+<h2>full list</h2>
+
+
+{% for x in CustomerProjects %}
+
+<li>{{x.assignDate}} - {{x.projectId}} - {{x.customerId}} </li>
+
+{% endfor %}

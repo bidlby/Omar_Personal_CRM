@@ -5,16 +5,16 @@
 
 {% block content %}
 
+<br>
 
 
-<div class="container-lg">
+<div class="col-md-6 container-sm form-control">
         <form method="post">
         {% csrf_token %}
 
-        {{ form.as_p}}
+        {{ form.as_p }}
 
-
-        <input type="submit" value="Send message">
+        <input class="btn btn-primary" type="submit" value="Save">
 
         </form>
 </div>

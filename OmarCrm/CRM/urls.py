@@ -20,8 +20,9 @@ from . import views
 app_name = 'CRM'
 
 urlpatterns = [
-    path('test',views.test,name='test'),
+    path('',views.test,name='home'),
     path('NewCustomerInfo',views.NewCustomerInfo.as_view() , name='NewCustomerInfo'),
     path('customerList',views.customerList , name='customerList'),
+    path('UserCheckProject',views.UserCheckProject,name='UserCheckProject')
 
 ]

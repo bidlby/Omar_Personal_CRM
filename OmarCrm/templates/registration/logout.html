@@ -1,0 +1,15 @@
+{% block content %}
+
+{% if user.is_authenticated %}
+<h1>welcome {{user.get_username}}</h1>
+<a href="{% url 'logout'%}">logout</a>
+
+{% else %}
+
+<h2>log in here</h2>
+
+<a href="{% url 'login'%}">login</a>
+
+{% endif %}
+
+{% endblock %}

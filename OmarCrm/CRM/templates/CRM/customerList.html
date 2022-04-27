@@ -3,11 +3,18 @@
 
 {% block content %}
 
+{% if user.is_superuser %}
 
 {% for x in customerListQuery %}
 
 <li>{{x.customerName}} {{x.country}}</li>
 
 {% endfor %}
+
+{% else %}
+
+<h1>Please Login to see this page</h1>
+
+{% endif %}
 
 {%  endblock %}

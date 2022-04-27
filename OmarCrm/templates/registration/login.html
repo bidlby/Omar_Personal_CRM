@@ -1,0 +1,41 @@
+
+{% include 'CRM/base.html' %}
+{% include 'CRM/navbar.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h1>welcome {{user.get_username}}</h1>
+<a href="{% url 'logout'%}">logout</a>
+
+{% else %}
+
+
+<style>
+.center-this{
+    display: grid;
+    place-items: center;
+    align-content: center;
+  }
+</style>
+
+<br>
+<div class="form-group">
+<form method="post">
+
+    {% csrf_token %}
+
+    <table>
+    {{form.as_p}}
+
+    
+</table>
+<input type="submit">
+</form>
+
+</div>
+</div>
+
+{% endif %}
+
+{% endblock %}

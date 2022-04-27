@@ -82,6 +82,8 @@ class assignProjectModel(models.Model):
     assignDate = models.DateField(default=datetime.now)
     userLogin = models.ForeignKey(User,on_delete=models.SET_NULL , null=True , blank=True )
 
+    def __str__(self) -> str:
+        return f"{self.userLogin}"
 
 class commentsModel(models.Model):
     commentId = models.AutoField(primary_key=True)
