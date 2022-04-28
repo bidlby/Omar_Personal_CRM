@@ -1,15 +1,24 @@
 
 from distutils.log import error
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views.generic import CreateView , list , ListView
 from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from . forms import customerInfoForm , projectInfoForm
+from . forms import customerInfoForm , projectInfoForm , assignProjectForm
+from django.contrib.auth.forms import UserCreationForm
 
+### Authintaion :
 
+class signUpView(CreateView):
+    form_class = UserCreationForm    
+    success_url = reverse_lazy('login')
+    template_name = 'CRM/signUp.html'
+
+#####
 
 # Create your views here.
 
@@ -30,6 +39,19 @@ class NewProject(LoginRequiredMixin,CreateView):
     form_class = projectInfoForm
     model = ProjectInfoModel
     success_url = '/customerList'
+
+
+#### end Create New 
+
+### Assign Project :
+
+class AssignPojectView(LoginRequiredMixin,CreateView):
+    template_name = 'CRM/AssignProject.html'
+    form_class = assignProjectForm
+    model = assignProjectModel
+    success_url = '/customerList'
+
+### End Assign Project 
 
 def customerList(request):
     customerListQuery = CustomerInfoModel.objects.all()

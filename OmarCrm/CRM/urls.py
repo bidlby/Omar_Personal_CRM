@@ -23,7 +23,9 @@ urlpatterns = [
     path('',views.test,name='home'),
     path('NewCustomerInfo',views.NewCustomerInfo.as_view() , name='NewCustomerInfo'),
     path('NewProject',views.NewProject.as_view() , name='NewProject'),
+    path('AssignPoject',views.AssignPojectView.as_view() , name='AssignPoject'),
     path('customerList',views.customerList , name='customerList'),
-    path('UserCheckProject',views.UserCheckProject,name='UserCheckProject')
+    path('UserCheckProject',views.UserCheckProject,name='UserCheckProject'),
+    path('signUp',views.signUpView.as_view(),name='signUp'),
 
 ]

@@ -1,5 +1,16 @@
 from django import forms
-from . models import CustomerInfoModel , ProjectInfoModel
+from . models import CustomerInfoModel , ProjectInfoModel , assignProjectModel
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+
+### Authentaion 
+
+#####
+
+
+
+#####
 
 class customerInfoForm(forms.ModelForm):
     class Meta:
@@ -43,4 +54,23 @@ class projectInfoForm(forms.ModelForm):
             'endDate' : 'End Date',
             'price' : 'Price',
             'active' : 'Acitve',
+        }
+
+class assignProjectForm(forms.ModelForm):
+    class Meta:
+        model = assignProjectModel
+        fields = ('customerId','projectId','assignDate','userLogin')
+
+        widgets = {
+            'customerId' : forms.Select(attrs={'class':'form-control'} ),
+            'projectId' : forms.Select(attrs={'class':'form-control'} ),
+            'assignDate' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
+            'userLogin' : forms.Select(attrs={'class':'form-control'} ),            
+        }
+
+        labels = {
+            'customerId' : 'Customer Name',
+            'projectId' : 'Project Desc',
+            'assignDate' : 'Start Date',
+            'userLogin' : 'User Name',
         }
