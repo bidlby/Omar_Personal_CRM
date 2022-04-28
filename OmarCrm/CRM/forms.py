@@ -1,5 +1,5 @@
 from django import forms
-from . models import CustomerInfoModel
+from . models import CustomerInfoModel , ProjectInfoModel
 
 class customerInfoForm(forms.ModelForm):
     class Meta:
@@ -21,5 +21,26 @@ class customerInfoForm(forms.ModelForm):
             'mobileNumber' : 'Mobile Number',
             'workNumber' : 'Work Number',
             'GD1' : 'Contact Date'
+        }
 
+class projectInfoForm(forms.ModelForm):
+    class Meta:
+        model = ProjectInfoModel
+        fields = ('projectName','projectDesc','startDate','endDate','price','active')
+
+        widgets = {
+            'projectName' : forms.TextInput(attrs={'class':'form-control'} ),
+            'projectDesc' : forms.Textarea(attrs={'class':'form-control'} ),
+            'startDate' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
+            'endDate' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
+            'price' : forms.NumberInput(attrs={'class':'form-control'}),
+        }
+
+        labels = {
+            'projectName' : 'Project Name',
+            'projectDesc' : 'Project Desc',
+            'startDate' : 'Start Date',
+            'endDate' : 'End Date',
+            'price' : 'Price',
+            'active' : 'Acitve',
         }

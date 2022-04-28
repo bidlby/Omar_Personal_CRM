@@ -22,6 +22,7 @@ app_name = 'CRM'
 urlpatterns = [
     path('',views.test,name='home'),
     path('NewCustomerInfo',views.NewCustomerInfo.as_view() , name='NewCustomerInfo'),
+    path('NewProject',views.NewProject.as_view() , name='NewProject'),
     path('customerList',views.customerList , name='customerList'),
     path('UserCheckProject',views.UserCheckProject,name='UserCheckProject')
 

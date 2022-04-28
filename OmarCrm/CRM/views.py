@@ -2,12 +2,12 @@
 from distutils.log import error
 from django.shortcuts import redirect, render
 from django.views.generic import CreateView , list , ListView
-from . models import CustomerInfoModel, assignProjectModel
+from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from . forms import customerInfoForm
+from . forms import customerInfoForm , projectInfoForm
 
 
 
@@ -17,11 +17,18 @@ def test(request):
     x = 'basel'
     return render(request,'CRM/index.html',{'x':x})
 
+### Create New :
 
 class NewCustomerInfo(LoginRequiredMixin,CreateView):
     template_name = 'CRM/NewCustomer.html'
     form_class = customerInfoForm
     model = CustomerInfoModel
+    success_url = '/customerList'
+
+class NewProject(LoginRequiredMixin,CreateView):
+    template_name = 'CRM/NewProject.html'
+    form_class = projectInfoForm
+    model = ProjectInfoModel
     success_url = '/customerList'
 
 def customerList(request):
