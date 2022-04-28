@@ -20,16 +20,12 @@
 </style>
 
 <br>
-<div class="form-group">
+<div class="container form-group">
 <form method="post">
 
     {% csrf_token %}
 
-    <table>
     {{form.as_p}}
-
-    
-</table>
 <input type="submit">
 </form>
 

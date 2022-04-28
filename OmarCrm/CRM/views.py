@@ -1,5 +1,4 @@
 
-from distutils.log import error
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView , list , ListView
@@ -7,13 +6,14 @@ from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin 
 from . forms import customerInfoForm , projectInfoForm , assignProjectForm
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 ### Authintaion :
 
-class signUpView(CreateView):
+class signUpView(LoginRequiredMixin,CreateView):
     form_class = UserCreationForm    
     success_url = reverse_lazy('login')
     template_name = 'CRM/signUp.html'
@@ -60,26 +60,37 @@ def customerList(request):
 
     return render(request,'CRM/customerList.html',context)
 
-#@login_required
+@login_required
 def UserCheckProject(request):
+
+    loginUser = User.objects.filter(username = request.user)
 
     try:
         q1 = assignProjectModel.objects.filter(userLogin = request.user)
     except Exception as e:
-        q1 = ''
+        q1 = 'NO Projects'
 
-    CustomerIDFilter = q1.values_list('customerId')[0]
-    
-    CustomerProjects = assignProjectModel.objects.filter(customerId = CustomerIDFilter)
+    try:
+        CustomerIDFilter = q1.values_list('customerId')[0]
+    except Exception as e:
+        CustomerIDFilter = 'NO Projects'
+    try:
+        CustomerProjects = assignProjectModel.objects.filter(customerId = CustomerIDFilter)
+    except Exception as e:
+        CustomerProjects = ''
 
-    customerProfile = CustomerInfoModel.objects.filter(customerId =  CustomerIDFilter[0])
 
+    try:
+        customerProfile = CustomerInfoModel.objects.filter(customerId =  CustomerIDFilter[0])
+    except Exception as e:
+        customerProfile = ''
 
     context = {
      'q1':q1 ,
      'CustomerIDFilter':CustomerIDFilter,
      'CustomerProjects':CustomerProjects,
-     'customerProfile':customerProfile
+     'customerProfile':customerProfile,
+     'loginUser' : loginUser
      }
 
     return render(request,'CRM/Profile.html',context)
