@@ -27,5 +27,8 @@ urlpatterns = [
     path('customerList',views.customerList , name='customerList'),
     path('UserCheckProject',views.UserCheckProject,name='UserCheckProject'),
     path('signUp',views.signUpView.as_view(),name='signUp'),
+    path('customerProfile/<int:pk>',views.customerProfile,name='customerProfile'),
+
+    
 
 ]

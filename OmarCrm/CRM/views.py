@@ -53,6 +53,14 @@ class AssignPojectView(LoginRequiredMixin,CreateView):
 
 ### End Assign Project 
 
+## Customer Profile 
+
+def customerProfile(request,pk):
+    profile = CustomerInfoModel.objects.get(customerId = pk)
+
+    context = {'profile':profile}
+    return render(request,'CRM/CustomerProfile.html',context)
+
 ##Customer List
 @login_required
 def customerList(request):
@@ -87,8 +95,6 @@ def UserCheckProject(request):
         CustomerProjects = assignProjectModel.objects.filter(customerId = CustomerIDFilter)
     except Exception as e:
         CustomerProjects = ''
-
-
 
 
     context = {
