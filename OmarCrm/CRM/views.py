@@ -53,12 +53,16 @@ class AssignPojectView(LoginRequiredMixin,CreateView):
 
 ### End Assign Project 
 
+##Customer List
+@login_required
 def customerList(request):
-    customerListQuery = CustomerInfoModel.objects.all()
+    customerListQuery = CustomerInfoModel.objects.all().filter(active = True)
 
     context = {'customerListQuery':customerListQuery}
 
     return render(request,'CRM/customerList.html',context)
+
+
 
 @login_required
 def UserCheckProject(request):

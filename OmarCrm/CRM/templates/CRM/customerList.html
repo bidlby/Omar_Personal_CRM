@@ -3,18 +3,33 @@
 
 {% block content %}
 
-{% if user.is_superuser %}
-
-{% for x in customerListQuery %}
-
-<li>{{x.customerName}} {{x.country}}</li>
-
-{% endfor %}
-
-{% else %}
-
-<h1>Please Login to see this page</h1>
-
-{% endif %}
+<br>
+<div class="container-lg">
+    <h2>Active Customer List</h2>
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Customer ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Country</th>
+        <th scope="col">Mobile Number</th>
+        <th scope="col">User Login</th>
+        <th scope="col">Active</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+          {% for x in customerListQuery %}
+        <th scope="row" ><a href="">{{x.customerId}}</a></th>
+        <td>{{x.customerName}}</td>
+        <td>{{x.country}}</td>
+        <td>{{x.mobileNumber}}</td>
+        <td>{{x.userLogin}}</td>
+        <td>{{x.active}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 {%  endblock %}
