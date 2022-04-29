@@ -66,6 +66,11 @@ def UserCheckProject(request):
     loginUser = User.objects.filter(username = request.user)
 
     try:
+        customerProfile = CustomerInfoModel.objects.filter(userLogin =  loginUser[0])
+    except Exception as e:
+        customerProfile = ''
+
+    try:
         q1 = assignProjectModel.objects.filter(userLogin = request.user)
     except Exception as e:
         q1 = 'NO Projects'
@@ -80,10 +85,7 @@ def UserCheckProject(request):
         CustomerProjects = ''
 
 
-    try:
-        customerProfile = CustomerInfoModel.objects.filter(customerId =  CustomerIDFilter[0])
-    except Exception as e:
-        customerProfile = ''
+
 
     context = {
      'q1':q1 ,

@@ -21,7 +21,7 @@ class CustomerInfoModel(models.Model):
     mobileNumber = models.IntegerField(unique=True)
     workNumber = models.IntegerField()
     email = models.EmailField(max_length=50 , unique=True)
-    userLogin = models.ForeignKey(User,on_delete=models.SET_NULL , null=True , blank=True )
+    userLogin = models.OneToOneField(User,on_delete=models.SET_NULL , null=True , blank=True , unique=True)
     GA1 = models.CharField(max_length=100 , blank=True, null=True)
     GA2 = models.CharField(max_length=100 , blank=True, null=True)
     GA3 = models.CharField(max_length=100 , blank=True, null=True)
