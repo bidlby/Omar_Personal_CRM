@@ -15,21 +15,24 @@
         <th scope="col">Mobile Number</th>
         <th scope="col">User Login</th>
         <th scope="col">Active</th>
+        <th scope="col">Update</th>
       </tr>
     </thead>
     <tbody>
       <tr>
           {% for x in customerListQuery %}
-        <th scope="row" ><a href="">{{x.customerId}}</a></th>
+        <th scope="row" ><a href="/customerProfile/{{x.customerId}}">{{x.customerId}}</a></th>
         <td>{{x.customerName}}</td>
         <td>{{x.country}}</td>
         <td>{{x.mobileNumber}}</td>
         <td>{{x.userLogin}}</td>
         <td>{{x.active}}</td>
+        <td><button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'CRM:customerProfile' x.customerId %}">edit</button></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
 
 {%  endblock %}

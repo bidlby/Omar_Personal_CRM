@@ -10,7 +10,12 @@
 
 
 <div class="col-md-6 container-sm form-control">
-        <H2>Create New Project</H2>
+        {% if request.path == '/NewProject' %}
+        <h1>Create New Project  </h1>
+        
+        {% else %}
+        <h1>Update Project Info </h1>
+        {% endif %}
         <br>
         <form method="post">
         {% csrf_token %}

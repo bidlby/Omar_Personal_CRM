@@ -1,7 +1,7 @@
 
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView , list , ListView
+from django.views.generic import CreateView , list , ListView , UpdateView
 from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -40,8 +40,27 @@ class NewProject(LoginRequiredMixin,CreateView):
     model = ProjectInfoModel
     success_url = '/customerList'
 
+    def form_valid(self, form):
+        form.instance.createdBy = self.request.user
+        return super().form_valid(form)
+
 
 #### end Create New 
+
+## update views :
+
+class updateProject(LoginRequiredMixin,UpdateView):
+    template_name = 'CRM/NewProject.html'
+    form_class = projectInfoForm
+    model = ProjectInfoModel
+    success_url = '/ProjectsList'
+
+class updateCustomerProfile(LoginRequiredMixin,UpdateView):
+    template_name = 'CRM/customerProfileUpdate.html'
+    form_class = customerInfoForm
+    #fields = ['customerName']
+    model = CustomerInfoModel
+    success_url = '/customerList'
 
 ### Assign Project :
 
@@ -61,7 +80,7 @@ def customerProfile(request,pk):
     context = {'profile':profile}
     return render(request,'CRM/CustomerProfile.html',context)
 
-##Customer List
+## Listس
 @login_required
 def customerList(request):
     customerListQuery = CustomerInfoModel.objects.all().filter(active = True)
@@ -70,6 +89,13 @@ def customerList(request):
 
     return render(request,'CRM/customerList.html',context)
 
+@login_required
+def ProjectsList(request):
+    projectListQuery = ProjectInfoModel.objects.all().filter(active = True)
+
+    context = {'projectListQuery':projectListQuery}
+
+    return render(request,'CRM/projectList.html',context)
 
 
 @login_required
