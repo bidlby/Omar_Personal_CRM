@@ -3,10 +3,6 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-<<<<<<< HEAD
-=======
-from django.forms import CharField
->>>>>>> a3f690810796a8110d35c496239aaab98cb7c4d0
 
 
 
