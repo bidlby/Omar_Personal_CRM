@@ -33,6 +33,9 @@ urlpatterns = [
     path('updateCustomerProfile/<int:pk>',views.updateCustomerProfile.as_view(),name='updateCustomerProfile'),
     path('ProjectsList',views.ProjectsList,name='ProjectsList'),
     path('ProjectsHistoryList',views.ProjectsHistoryList,name='ProjectsHistoryList'),
+    path('testView',views.testView.as_view(),name='testView'),
+    path('NewPayment',views.NewPaymentView.as_view(),name='NewPayment'),
+
 
 
     

@@ -1,15 +1,16 @@
 
 from audioop import reverse
+from dataclasses import fields
 from multiprocessing import context
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView , list , ListView , UpdateView
-from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel , commentsModel
+from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel , commentsModel, paymentsModel , testModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin 
-from . forms import customerInfoForm, newCommentForm , projectInfoForm , assignProjectForm
+from . forms import customerInfoForm, newCommentForm , projectInfoForm , assignProjectForm , paymentsForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -81,6 +82,16 @@ class NewComment(LoginRequiredMixin,CreateView):
     def get_success_url(self):
        return reverse_lazy('CRM:NewComment' , kwargs={'pk': self.kwargs['pk']})
   
+class NewPaymentView(LoginRequiredMixin,CreateView):
+    template_name = 'CRM/NewPayment.html'
+    form_class = paymentsForm
+    model = paymentsModel
+    success_url = '/NewPayment'
+
+    def form_valid(self, form):
+        form.instance.createdBy = self.request.user
+        return super().form_valid(form)
+
 
 #### end Create New 
 
@@ -91,6 +102,13 @@ class updateProject(LoginRequiredMixin,UpdateView):
     form_class = projectInfoForm
     model = ProjectInfoModel
     success_url = '/ProjectsList'
+
+class testView(LoginRequiredMixin,CreateView):
+    template_name = 'CRM/ZTestView.html'
+    #form_class = projectInfoForm
+    fields = ('customerIdt',)
+    model = testModel
+    success_url = '/testView'
 
 class updateCustomerProfile(LoginRequiredMixin,UpdateView):
     template_name = 'CRM/customerProfileUpdate.html'
@@ -132,8 +150,7 @@ def customerList(request):
 
 @login_required
 def ProjectsList(request):
-    projectListQuery = assignProjectModel.objects.select_related('projectId_id').values_list('projectId__projectId','projectId__projectName','customerId__customerName','projectId__startDate','projectId__endDate','projectId__price','projectId__active','projectId__createdBy__username','userLogin').order_by('-projectId__startDate')
-
+    projectListQuery = assignProjectModel.objects.select_related('projectId_id').values_list('projectId__projectId','projectId__projectName','customerId__customerName','projectId__startDate','projectId__endDate','projectId__price','projectId__active','projectId__createdBy__username','userLogin').filter(projectId__active=True).order_by('-projectId_id')
     context = {'projectListQuery':projectListQuery}
 
     return render(request,'CRM/projectList.html',context)
@@ -141,10 +158,12 @@ def ProjectsList(request):
 
 @login_required
 def ProjectsHistoryList(request):
-    projectListQuery = ProjectInfoModel.objects.all().filter(active = False)
+    projectListQuery = assignProjectModel.objects.select_related('projectId_id').values_list('projectId__projectId','projectId__projectName','customerId__customerName','projectId__startDate','projectId__endDate','projectId__price','projectId__active','projectId__createdBy__username','userLogin').filter(projectId__active=False).order_by('-projectId_id')
+
     context = {'projectListQuery':projectListQuery}
     return render(request,'CRM/projectHistoryList.html',context)
 
+## By User itself:
 @login_required
 def UserCheckProject(request):
 
@@ -165,17 +184,22 @@ def UserCheckProject(request):
     except Exception as e:
         CustomerIDFilter = 'NO Projects'
     try:
-        CustomerProjects = assignProjectModel.objects.filter(customerId = CustomerIDFilter)
+        CustomerProjects = assignProjectModel.objects.values('projectId__projectName','assignDate','projectId__price','projectId__active','projectId__endDate').filter(customerId = CustomerIDFilter)
     except Exception as e:
         CustomerProjects = ''
 
+    try:
+        CustomerPayment = paymentsModel.objects.values('customerId__customerName','transactionDate','paymentType','paymentAmount','Currency').filter(customerId = CustomerIDFilter).order_by('-transactionDate')
+    except Exception as e:
+        CustomerPayment = ''
 
     context = {
      'q1':q1 ,
      'CustomerIDFilter':CustomerIDFilter,
      'CustomerProjects':CustomerProjects,
      'customerProfile':customerProfile,
-     'loginUser' : loginUser
+     'loginUser' : loginUser,
+     'CustomerPayment' : CustomerPayment
      }
 
     return render(request,'CRM/Profile.html',context)

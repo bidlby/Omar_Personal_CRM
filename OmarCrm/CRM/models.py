@@ -3,6 +3,8 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.forms import CharField
+from numpy import save
 
 
 # Create your models here.
@@ -85,8 +87,12 @@ class assignProjectModel(models.Model):
     customerId = models.ForeignKey(CustomerInfoModel,on_delete=models.DO_NOTHING)
     projectId = models.OneToOneField(ProjectInfoModel,on_delete=models.DO_NOTHING)
     assignDate = models.DateField(default=datetime.now)
-    userLogin = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="a" ,  on_delete=models.DO_NOTHING , null=True , blank=True )
+    userLogin = models.CharField(max_length=50, null=True , blank=True )
     createdBy = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    def save(self, *args , **kwargs):
+        self.userLogin = CustomerInfoModel.objects.values('userLogin__username').filter(customerName = self.customerId)
+        super().save(*args, **kwargs) 
 
     def __str__(self) -> str:
         return f"{self.userLogin} - {self.projectId}"
@@ -119,14 +125,25 @@ class paymentsModel(models.Model):
 
     transactionId = models.AutoField(primary_key=True)
     customerId = models.ForeignKey(CustomerInfoModel,on_delete=models.DO_NOTHING)
-    projectId = models.ForeignKey(ProjectInfoModel,on_delete=models.DO_NOTHING)
     paymentRef = models.CharField(max_length=100)
     transactionDate = models.DateField(default=datetime.now)
     paymentType = models.CharField(max_length=10 , choices=payType)
     paymentAmount = models.IntegerField()
     Currency = models.CharField(max_length=6 , choices=currency)
+    createdBy = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     GA1 = models.CharField(max_length=100 , blank=True, null=True)
-    GB1 = models.BooleanField()
+    GB1 = models.BooleanField(blank=True, null=True)
     GD1 = models.DateField(blank=True, null=True)
 
 
+## Test Model :
+
+class testModel(models.Model):
+    customerIdt = models.ForeignKey(CustomerInfoModel, on_delete=models.DO_NOTHING)
+    userLogint = models.CharField(max_length=10 )
+    
+    def save(self, *args , **kwargs):
+        self.userLogint = CustomerInfoModel.objects.values('userLogin__username').filter(customerName = self.customerIdt)
+        super().save(*args, **kwargs)
+
+        print(save)

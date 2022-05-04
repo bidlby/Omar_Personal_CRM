@@ -1,5 +1,5 @@
 from django import forms
-from . models import CustomerInfoModel , ProjectInfoModel , assignProjectModel, commentsModel
+from . models import CustomerInfoModel , ProjectInfoModel , assignProjectModel, commentsModel , paymentsModel
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.admin import widgets
@@ -29,8 +29,8 @@ class customerInfoForm(forms.ModelForm):
             'mobileNumber' : forms.NumberInput(attrs={'class':'form-control'} ),
             'workNumber' : forms.NumberInput(attrs={'class':'form-control'} ),
             'email' : forms.EmailInput(attrs={'class':'form-control'} ),
-            #'GD1' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
-            'GD1' : forms.DateInput(format='%d/%m/%Y'),
+            'GD1' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
+            #'GD1' : forms.DateInput(format='%d/%m/%Y'),
             'userLogin' : forms.Select(attrs={'class':'form-control'})
         }
 
@@ -66,7 +66,7 @@ class projectInfoForm(forms.ModelForm):
 class assignProjectForm(forms.ModelForm):
     class Meta:
         model = assignProjectModel
-        fields = ('customerId','projectId','assignDate','userLogin')
+        fields = ('customerId','projectId','assignDate')
 
         widgets = {
             'customerId' : forms.Select(attrs={'class':'form-control'} ),
@@ -97,4 +97,30 @@ class newCommentForm(forms.ModelForm):
         labels = {
             'projectId' : '',
             'comment' : 'Comment',
+        }
+
+
+class paymentsForm(forms.ModelForm):
+    class Meta:
+        model = paymentsModel
+        fields = ('customerId','paymentRef','transactionDate','paymentType','paymentAmount','Currency')
+
+        widgets = {
+            'customerId' : forms.Select(attrs={'class':'form-control'} ),
+            'paymentRef' : forms.TextInput(attrs={'class':'form-control'} ),
+            'transactionDate' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
+            'paymentType' : forms.Select(attrs={'class':'form-control'} ),            
+            'Currency' : forms.Select(attrs={'class':'form-control'} ),    
+            'paymentAmount' : forms.NumberInput(attrs={'class':'form-control'} ),    
+
+                    
+        }
+
+        labels = {
+            'customerId' : 'Customer Name',
+            'paymentRef' : 'Payment Desc',
+            'transactionDate' : 'Transaction Date',
+            'paymentType' : 'Payment Type',
+            'Currency' : 'Currency',
+            'paymentAmount' : 'Amount',
         }

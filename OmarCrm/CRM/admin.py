@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomerInfoModel , countryListModel , ProjectInfoModel , assignProjectModel , projectContractModel , paymentsModel , commentsModel
+from .models import CustomerInfoModel , countryListModel , ProjectInfoModel , assignProjectModel , projectContractModel , paymentsModel , commentsModel , testModel
 
 # Register your models here.
 
@@ -10,4 +10,7 @@ admin.site.register(assignProjectModel) ,
 admin.site.register(projectContractModel) , 
 admin.site.register(paymentsModel) , 
 admin.site.register(commentsModel) , 
+admin.site.register(testModel) , 
+
+
 
