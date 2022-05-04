@@ -3,8 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.forms import CharField
-from numpy import save
+
 
 
 # Create your models here.
@@ -146,4 +145,3 @@ class testModel(models.Model):
         self.userLogint = CustomerInfoModel.objects.values('userLogin__username').filter(customerName = self.customerIdt)
         super().save(*args, **kwargs)
 
-        print(save)
