@@ -1,5 +1,5 @@
 from django import forms
-from . models import CustomerInfoModel , ProjectInfoModel , assignProjectModel
+from . models import CustomerInfoModel , ProjectInfoModel , assignProjectModel, commentsModel
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.admin import widgets
@@ -73,6 +73,7 @@ class assignProjectForm(forms.ModelForm):
             'projectId' : forms.Select(attrs={'class':'form-control'} ),
             'assignDate' : forms.DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control' , 'placeholder':'yyyy-mm-dd (2025-07-28)'} ),
             'userLogin' : forms.Select(attrs={'class':'form-control'} ),            
+            'createdBy' : forms.Select(attrs={'class':'form-control'} ),            
         }
 
         labels = {
@@ -80,4 +81,20 @@ class assignProjectForm(forms.ModelForm):
             'projectId' : 'Project Desc',
             'assignDate' : 'Start Date',
             'userLogin' : 'User Name',
+            'createdBy' : 'createdBy Name',
+        }
+
+class newCommentForm(forms.ModelForm):
+    class Meta:
+        model = commentsModel
+        fields = ('projectId','comment')
+
+        widgets = {
+            'projectId' : forms.Select(attrs={'class':'form-control' , 'hidden': 'True'} ),
+            'comment' : forms.Textarea(attrs={'class':'form-control'} ),            
+        }
+
+        labels = {
+            'projectId' : '',
+            'comment' : 'Comment',
         }

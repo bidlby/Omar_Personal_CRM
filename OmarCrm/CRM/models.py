@@ -2,6 +2,7 @@
 from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 # Create your models here.
@@ -21,7 +22,8 @@ class CustomerInfoModel(models.Model):
     mobileNumber = models.IntegerField(unique=True)
     workNumber = models.IntegerField()
     email = models.EmailField(max_length=50 , unique=True)
-    userLogin = models.OneToOneField(User,on_delete=models.SET_NULL , null=True , blank=True , unique=True)
+    userLogin = models.OneToOneField(settings.AUTH_USER_MODEL,related_name="b" ,  on_delete=models.DO_NOTHING , null=True , blank=True )
+    createdBy = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     active = models.BooleanField(default=True)
     GA1 = models.CharField(max_length=100 , blank=True, null=True)
     GA2 = models.CharField(max_length=100 , blank=True, null=True)
@@ -81,26 +83,26 @@ class projectContractModel(models.Model):
 class assignProjectModel(models.Model):
     assignId = models.AutoField(primary_key=True)
     customerId = models.ForeignKey(CustomerInfoModel,on_delete=models.DO_NOTHING)
-    projectId = models.ForeignKey(ProjectInfoModel,on_delete=models.DO_NOTHING)
+    projectId = models.OneToOneField(ProjectInfoModel,on_delete=models.DO_NOTHING)
     assignDate = models.DateField(default=datetime.now)
-    userLogin = models.ForeignKey(User,on_delete=models.SET_NULL , null=True , blank=True )
+    userLogin = models.ForeignKey(settings.AUTH_USER_MODEL,related_name="a" ,  on_delete=models.DO_NOTHING , null=True , blank=True )
+    createdBy = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     def __str__(self) -> str:
-        return f"{self.userLogin}"
+        return f"{self.userLogin} - {self.projectId}"
 
 class commentsModel(models.Model):
     commentId = models.AutoField(primary_key=True)
-    customerId = models.ForeignKey(CustomerInfoModel,on_delete=models.DO_NOTHING)
     projectId = models.ForeignKey(ProjectInfoModel,on_delete=models.DO_NOTHING)
-    commentDate = models.DateField(default=datetime.now)
-    comment = models.CharField(max_length=150)
-    CreatedBy = models.CharField(max_length=50 ,  default=User)
+    commentDate = models.DateTimeField(default=datetime.now)
+    comment = models.CharField(max_length=400)
+    createdBy = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     GA1 = models.CharField(max_length=100 , blank=True, null=True)
-    GB1 = models.BooleanField()
+    GB1 = models.BooleanField(blank=True, null=True)
     GD1 = models.DateField(blank=True, null=True)
 
     def __str__(self) -> str:
-        return f"{self.commentDate} -- {self.customerId} -- {self.projectId} -- {self.comment}" 
+        return f"{self.projectId} -- {self.commentDate}  -- {self.projectId} -- {self.comment}" 
 
 
 class paymentsModel(models.Model):

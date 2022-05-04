@@ -1,13 +1,15 @@
 
-from django.shortcuts import redirect, render
+from audioop import reverse
+from multiprocessing import context
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView , list , ListView , UpdateView
-from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel
+from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel , commentsModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin 
-from . forms import customerInfoForm , projectInfoForm , assignProjectForm
+from . forms import customerInfoForm, newCommentForm , projectInfoForm , assignProjectForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -34,6 +36,10 @@ class NewCustomerInfo(LoginRequiredMixin,CreateView):
     model = CustomerInfoModel
     success_url = '/customerList'
 
+    def form_valid(self, form):
+        form.instance.createdBy = self.request.user
+        return super().form_valid(form)
+
 class NewProject(LoginRequiredMixin,CreateView):
     template_name = 'CRM/NewProject.html'
     form_class = projectInfoForm
@@ -44,6 +50,37 @@ class NewProject(LoginRequiredMixin,CreateView):
         form.instance.createdBy = self.request.user
         return super().form_valid(form)
 
+class NewComment(LoginRequiredMixin,CreateView):
+    template_name = 'CRM/NewComment.html'
+    form_class = newCommentForm
+    model = commentsModel
+    #success_url = '/customerList'
+
+    def form_valid(self, form):
+        form.instance.createdBy = self.request.user
+        return super().form_valid(form)
+
+    ## default Value for NewComment
+    def get_initial(self):
+        projectId = get_object_or_404(ProjectInfoModel, pk=self.kwargs['pk'])
+
+
+        return {
+        'projectId': projectId,
+        }  
+
+    def get_context_data(self, **kwargs):
+       context = super(NewComment, self).get_context_data(**kwargs)
+       context['queryset'] = ProjectInfoModel.objects.filter(pk= self.kwargs['pk'])
+       context['CommentList'] = commentsModel.objects.filter(projectId = self.kwargs['pk']).order_by('-commentDate')
+
+       print(context)
+
+       return context
+
+    def get_success_url(self):
+       return reverse_lazy('CRM:NewComment' , kwargs={'pk': self.kwargs['pk']})
+  
 
 #### end Create New 
 
@@ -70,10 +107,14 @@ class AssignPojectView(LoginRequiredMixin,CreateView):
     model = assignProjectModel
     success_url = '/customerList'
 
+    def form_valid(self, form):
+        form.instance.createdBy = self.request.user
+        return super().form_valid(form)
+
 ### End Assign Project 
 
 ## Customer Profile 
-
+@login_required
 def customerProfile(request,pk):
     profile = CustomerInfoModel.objects.get(customerId = pk)
 
@@ -91,12 +132,18 @@ def customerList(request):
 
 @login_required
 def ProjectsList(request):
-    projectListQuery = ProjectInfoModel.objects.all().filter(active = True)
+    projectListQuery = assignProjectModel.objects.select_related('projectId_id').values_list('projectId__projectId','projectId__projectName','customerId__customerName','projectId__startDate','projectId__endDate','projectId__price','projectId__active','projectId__createdBy__username','userLogin').order_by('-projectId__startDate')
 
     context = {'projectListQuery':projectListQuery}
 
     return render(request,'CRM/projectList.html',context)
 
+
+@login_required
+def ProjectsHistoryList(request):
+    projectListQuery = ProjectInfoModel.objects.all().filter(active = False)
+    context = {'projectListQuery':projectListQuery}
+    return render(request,'CRM/projectHistoryList.html',context)
 
 @login_required
 def UserCheckProject(request):

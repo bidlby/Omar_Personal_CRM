@@ -15,6 +15,7 @@
         <th scope="col">Mobile Number</th>
         <th scope="col">User Login</th>
         <th scope="col">Active</th>
+        <th scope="col">Created By</th>
         <th scope="col">Update</th>
       </tr>
     </thead>
@@ -26,8 +27,10 @@
         <td>{{x.country}}</td>
         <td>{{x.mobileNumber}}</td>
         <td>{{x.userLogin}}</td>
-        <td>{{x.active}}</td>
-        <td><button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'CRM:customerProfile' x.customerId %}">edit</button></td>
+        {% if x.active == True %} <td>Yes</td> {% else %} <td>No</td> {% endif %}
+        <td>{{x.createdBy}}</td>
+        <td><button class="btn btn-outline-success" type="submit" onclick="location.href='{% url 'CRM:updateCustomerProfile' x.customerId %}'">edit</button></td>
+
       </tr>
       {% endfor %}
     </tbody>
