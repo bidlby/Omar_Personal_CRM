@@ -14,12 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
-from . import views
+from django.urls import path 
+from . import views 
+from django.views.generic import RedirectView
 
 app_name = 'CRM'
 
 urlpatterns = [
+    path('',RedirectView.as_view(url='accounts/login')),
     path('',views.test,name='home'),
     path('NewCustomerInfo',views.NewCustomerInfo.as_view() , name='NewCustomerInfo'),
     path('NewComment/<int:pk>',views.NewComment.as_view() , name='NewComment'),
