@@ -139,7 +139,7 @@ def customerProfile(request,pk):
     context = {'profile':profile}
     return render(request,'CRM/CustomerProfile.html',context)
 
-## Listس
+## List
 @login_required
 def customerList(request):
     customerListQuery = CustomerInfoModel.objects.all().filter(active = True)
@@ -162,6 +162,14 @@ def ProjectsHistoryList(request):
 
     context = {'projectListQuery':projectListQuery}
     return render(request,'CRM/projectHistoryList.html',context)
+
+
+@login_required
+def PaymentHistory(request):
+    PyamentHitoryList = paymentsModel.objects.all().order_by('-transactionDate')
+
+    context = {'PyamentHitoryList':PyamentHitoryList}
+    return render(request,'CRM/PaymentHistoryList.html',context)
 
 ## By User itself:
 @login_required

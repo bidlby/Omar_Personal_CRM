@@ -5,20 +5,23 @@
 
 <br>
 
-<div class="col-md-6 container-sm form-control">
-        {% if request.path == '/NewProject' %}
-        <h1>Create New Project  </h1>
+<div class="col-md-12 container form-control" style="border-radius: 10%;">
+        <br>
+        {% if request.path == '/NewPayment' %}
+        <h2 class="container center" style="">Create New Payment</h2>
         
         {% else %}
-        <h1>Update Project Info </h1>
+        <h2>Update Payment </h2>
         {% endif %}
         <br>
         <form method="post">
         {% csrf_token %}
 
         {{ form.as_p }}
-
-        <input class="btn btn-primary" type="submit" value="Save">
+        <input style="border-radius: 10ch;" class="btn btn-primary form-control" type="submit" value="Save The Payment">
+<br>
+<br>
+        
 
         </form>
 </div>

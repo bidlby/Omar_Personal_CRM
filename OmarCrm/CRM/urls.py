@@ -17,6 +17,7 @@ Including another URLconf
 from django.urls import path 
 from . import views 
 from django.views.generic import RedirectView
+from django.contrib.auth import views as auth_views
 
 app_name = 'CRM'
 
@@ -37,7 +38,8 @@ urlpatterns = [
     path('ProjectsHistoryList',views.ProjectsHistoryList,name='ProjectsHistoryList'),
     path('testView',views.testView.as_view(),name='testView'),
     path('NewPayment',views.NewPaymentView.as_view(),name='NewPayment'),
-
+    path('PyamentHitoryList',views.PaymentHistory,name='PyamentHitoryList'),
+    path('accounts/login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
 
 
     
