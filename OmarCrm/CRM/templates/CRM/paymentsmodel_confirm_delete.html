@@ -1,0 +1,14 @@
+{% include 'CRM/base.html' %}
+{% include 'CRM/navbar.html' %}
+
+{% block content %}
+<br>
+<div class="container">
+<h2>are you sure want to delete ? </h2>
+<form method="post" class="from-control">
+    {% csrf_token %}
+<input class="btn-lg btn-danger btn-block" type="submit" value="Yes">
+</form>
+<button class="btn-lg btn btn-outline-secondary btn-block" onclick="location.href='{% url 'CRM:PaymentHitoryList'%}'">cancel</a></button>
+</div>
+{%  endblock %}

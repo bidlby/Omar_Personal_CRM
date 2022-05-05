@@ -4,7 +4,7 @@ from dataclasses import fields
 from multiprocessing import context
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView , list , ListView , UpdateView
+from django.views.generic import CreateView , list , ListView , UpdateView , DeleteView
 from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel , commentsModel, paymentsModel , testModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -86,7 +86,7 @@ class NewPaymentView(LoginRequiredMixin,CreateView):
     template_name = 'CRM/NewPayment.html'
     form_class = paymentsForm
     model = paymentsModel
-    success_url = '/NewPayment'
+    success_url = '/PaymentHitoryList'
 
     def form_valid(self, form):
         form.instance.createdBy = self.request.user
@@ -131,6 +131,15 @@ class AssignPojectView(LoginRequiredMixin,CreateView):
 
 ### End Assign Project 
 
+#### Deletes
+#################
+
+class deletePayment(LoginRequiredMixin,DeleteView):
+    #template_name = 'CRM/NewPayment.html'
+    model = paymentsModel
+    success_url = '/PaymentHitoryList'
+
+
 ## Customer Profile 
 @login_required
 def customerProfile(request,pk):
@@ -166,7 +175,7 @@ def ProjectsHistoryList(request):
 
 @login_required
 def PaymentHistory(request):
-    PyamentHitoryList = paymentsModel.objects.all().order_by('-transactionDate')
+    PyamentHitoryList = paymentsModel.objects.all().order_by('-transactionId')
 
     context = {'PyamentHitoryList':PyamentHitoryList}
     return render(request,'CRM/PaymentHistoryList.html',context)
