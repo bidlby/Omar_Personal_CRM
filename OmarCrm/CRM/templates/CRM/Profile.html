@@ -150,7 +150,6 @@
       <th scope="col">Transaction Date</th>
       <th scope="col">Type</th>
       <th scope="col">Amount</th>
-      <th scope="col">Currency</th>
     </tr>
   </thead>
   <tbody>
@@ -159,8 +158,7 @@
       <td  >{{x.customerId__customerName}}</td>
       <td>{{x.transactionDate}}</td>
       <td>{{x.paymentType}}</td>
-      <td>{{x.paymentAmount}}</td>
-      <td>{{x.Currency}}</td>
+      <td>{{x.paymentAmount}} {{x.Currency}}</td>
     </tr>
     {% endfor %}
   </tbody>
