@@ -1,7 +1,5 @@
 
-from audioop import reverse
-from dataclasses import fields
-from multiprocessing import context
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView , list , ListView , UpdateView , DeleteView
@@ -13,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from . forms import customerInfoForm, newCommentForm , projectInfoForm , assignProjectForm , paymentsForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db.models import Count , Max , F , Min , Q , Sum
 
 ### Authintaion :
 
@@ -222,3 +221,13 @@ def UserCheckProject(request):
     return render(request,'CRM/Profile.html',context)
 
 
+
+## Reports :
+## ACcounting Open Balance 
+
+def financeOpenBalance (request):
+    
+
+    context = {}
+
+    return render(request,'CRM/financeOpenBalance.html',context)
