@@ -130,7 +130,7 @@
         <td  >{{x.projectId__projectName}}</td>
         <td>{{x.assignDate}}</td>
         {% if x.projectId__endDate == Null %} <td style="color: green; font-family: 'Courier New', Courier, monospace;">On Going</td> {% else %} <td>{{x.projectId__endDate}}</td> {% endif %}
-        <td>{{x.projectId__price}}</td>
+        <td>{{x.projectId__price}} AED</td>
         {% if x.projectId__active == True %} <td style="color: green;">Yes</td> {% else %} <td style="color: red;">No</td> {% endif %}
       </tr>
       {% endfor %}

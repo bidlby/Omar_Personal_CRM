@@ -67,18 +67,13 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
               <li><a class="dropdown-item" href="{% url 'CRM:UserCheckProject' %}">My Profile</a></li>
-              <li><a class="dropdown-item" href="">My Account</a></li>
-              <li><a class="dropdown-item" href="">My Projects</a></li>
+              <li><a class="dropdown-item disabled" href="">My Account</a></li>
+              <li><a class="dropdown-item disabled" href="">My Projects</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item disabled" href="#">Payments</a></li>
             </ul>
           </li>
           {% endif %}
-
-          <li class="nav-item">
-            <a class="nav-link disabled">Link</a>
-          </li>
-
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
