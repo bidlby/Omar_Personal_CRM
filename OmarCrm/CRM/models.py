@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from pymysql import NotSupportedError
+#from pymysql import NotSupportedError
 
 
 
@@ -148,8 +148,8 @@ class customerPaymentAccount(models.Model):
     credit = models.IntegerField(editable=False)
     debit = models.IntegerField(editable=False)
 
-    def save(self,*args,**kwargs):
-        raise NotSupportedError('this model view and cant be saved') 
+    #def save(self,*args,**kwargs):
+    #    raise NotSupportedError('this model view and cant be saved') 
 
     class Meta:
        managed = False
