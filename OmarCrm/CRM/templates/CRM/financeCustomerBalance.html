@@ -7,10 +7,10 @@
 
 {{ request.path_info}}
 
-{% if request.path_info == '/financeOpenBalance' %}
 <br>
 <div class="container-lg">
-    <h2>Open Balance List</h2>
+    <h2 style="color: blue;">Statment of Account : {{Soa_Customer.0.customerName}} </h2>
+    <br>
 <table class="table table-bordered">
     <thead>
       <tr>
@@ -23,7 +23,7 @@
     </thead>
     <tbody>
       <tr>
-          {% for x in SOA_OpenBalance %}
+          {% for x in Soa_Customer %}
         <th scope="row" ><a href="/customerProfile/{{x.customerId}}">{{x.customerId}}</a></th>
         <td>{{x.customerName}}</td>
         <td>{{x.totalCredit}}</td>
@@ -37,35 +37,38 @@
   </table>
 </div>
 
-{% else %}
 <br>
 <div class="container-lg">
-    <h2>Closed Balance List</h2>
+    <h2 style="color: blue;">Detailed Account</h2>
+    <br>
 <table class="table table-bordered">
     <thead>
       <tr>
         <th scope="col">Customer ID</th>
         <th scope="col">Customer Name</th>
-        <th scope="col">Credit</th>
-        <th scope="col">Debit</th>
-        <th scope="col">Open Balance</th>
+        <th scope="col">transactionDate</th>
+        <th scope="col">paymenttype</th>
+        <th scope="col">paymentRef</th>
+        <th scope="col">type</th>
+        <th scope="col">credit</th>
+        <th scope="col">debit</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-          {% for x in SOA_ClosedBalance %}
+          {% for x in SoaDtl_Customer %}
         <th scope="row" ><a href="/customerProfile/{{x.customerId}}">{{x.customerId}}</a></th>
         <td>{{x.customerName}}</td>
-        <td>{{x.totalCredit}}</td>
-        <td >{{x.totalDebit}}</td>
-        <td>{{x.openBalance}}</td>
-
-
+        <td>{{x.transactionDate}}</td>
+        <td>{{x.paymenttype}}</td>
+        <td>{{x.paymentRef}}</td>
+        <td>{{x.type}}</td>
+        <td>{{x.credit}} {{x.Currency}}</td>
+        <td>{{x.debit}} {{x.Currency}}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
-{% endif %}
 {% endblock %}

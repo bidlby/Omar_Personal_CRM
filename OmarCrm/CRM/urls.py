@@ -41,7 +41,10 @@ urlpatterns = [
     path('PaymentHitoryList',views.PaymentHistory,name='PaymentHitoryList'),
     path('deletePayment/<int:pk>',views.deletePayment.as_view(),name='deletePayment'),
     path('accounts/login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
-    path('financeOpenBalance', views.financeOpenBalance ,name='financeOpenBalance'),
+    path('financeOpenBalance', views.financeBalance ,name='financeOpenBalance'),
+    path('financeClosedBalance', views.financeBalance ,name='financeClosedBalance'),
+    path('CustomerBalance/<int:pk>', views.CustomerAccountBalance ,name='CustomerBalance'),
+
 
 
   

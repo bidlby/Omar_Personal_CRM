@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from pymysql import NotSupportedError
 
 
 
@@ -134,6 +135,31 @@ class paymentsModel(models.Model):
     GB1 = models.BooleanField(blank=True, null=True)
     GD1 = models.DateField(blank=True, null=True)
 
+
+
+
+class customerPaymentAccount(models.Model):
+    transactionDate = models.DateField(editable=False)
+    customerId = models.IntegerField(editable=False , primary_key=True)
+    customerName = models.CharField(editable=False,max_length=100)
+    paymenttype = models.CharField(editable=False , max_length=50)
+    paymentRef = models.CharField(editable=False , max_length=200)
+    type = models.CharField(editable=False , max_length=200)
+    credit = models.IntegerField(editable=False)
+    debit = models.IntegerField(editable=False)
+
+    def save(self,*args,**kwargs):
+        raise NotSupportedError('this model view and cant be saved') 
+
+    class Meta:
+       managed = False
+       db_table = 'CustomerAccountBalance'
+       verbose_name = 'CustomerAccountBalance'
+       verbose_name_plural = 'CustomerAccountBalances'
+       ordering = ['transactionDate']
+
+    def __str__(self) -> str:
+       return f"{self.customerId} , {self.customerName} , {self.transactionDate} , {self.paymenttype} "
 
 ## Test Model :
 

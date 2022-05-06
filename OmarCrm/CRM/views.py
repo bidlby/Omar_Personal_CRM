@@ -1,9 +1,10 @@
 
 
+from importlib.resources import path
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView , list , ListView , UpdateView , DeleteView
-from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel , commentsModel, paymentsModel , testModel
+from . models import CustomerInfoModel, assignProjectModel , ProjectInfoModel , commentsModel, paymentsModel , testModel , customerPaymentAccount
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -225,9 +226,25 @@ def UserCheckProject(request):
 ## Reports :
 ## ACcounting Open Balance 
 
-def financeOpenBalance (request):
+def financeBalance (request):
     
+    # Open
+    SOA_OpenBalance = customerPaymentAccount.objects.values('customerId','customerName').annotate(totalCredit = Sum('credit') , totalDebit = Sum('debit') , openBalance = F('totalCredit')-F('totalDebit')).filter(openBalance__gt = 0).order_by('-openBalance')
 
-    context = {}
+    #Closed
+    SOA_ClosedBalance = customerPaymentAccount.objects.values('customerId','customerName').annotate(totalCredit = Sum('credit') , totalDebit = Sum('debit') , openBalance = F('totalCredit')-F('totalDebit')).filter(openBalance = 0).order_by('-customerId')
+
+
+    context = {'SOA_OpenBalance':SOA_OpenBalance,'SOA_ClosedBalance':SOA_ClosedBalance}
 
     return render(request,'CRM/financeOpenBalance.html',context)
+
+def CustomerAccountBalance (request,pk):
+    Soa_Customer = customerPaymentAccount.objects.values('customerId','customerName').annotate(totalCredit = Sum('credit') , totalDebit = Sum('debit') , openBalance = F('totalCredit')-F('totalDebit')).filter(customerId = pk)
+
+    SoaDtl_Customer = customerPaymentAccount.objects.all().filter(customerId = pk)
+
+
+    context = {'Soa_Customer':Soa_Customer,'SoaDtl_Customer':SoaDtl_Customer}
+
+    return render(request,'CRM/financeCustomerBalance.html',context)
