@@ -12,7 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from . forms import customerInfoForm, newCommentForm , projectInfoForm , assignProjectForm , paymentsForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.db.models import Count , Max , F , Min , Q , Sum
+from django.db.models import Count , Max , F , Min , Q , Sum 
+from django.db.models.functions import TruncMonth , TruncYear
 
 ### Authintaion :
 
@@ -223,7 +224,7 @@ def UserCheckProject(request):
 
 
 
-## Reports :
+#### Reports :
 ## ACcounting Open Balance 
 
 def financeBalance (request):
@@ -233,7 +234,6 @@ def financeBalance (request):
 
     #Closed
     SOA_ClosedBalance = customerPaymentAccount.objects.values('customerId','customerName').annotate(totalCredit = Sum('credit') , totalDebit = Sum('debit') , openBalance = F('totalCredit')-F('totalDebit')).filter(openBalance = 0).order_by('-customerId')
-
 
     context = {'SOA_OpenBalance':SOA_OpenBalance,'SOA_ClosedBalance':SOA_ClosedBalance}
 
@@ -248,3 +248,17 @@ def CustomerAccountBalance (request,pk):
     context = {'Soa_Customer':Soa_Customer,'SoaDtl_Customer':SoaDtl_Customer}
 
     return render(request,'CRM/financeCustomerBalance.html',context)
+
+## Total Projects : 
+def projectMonthlyReport (request):
+
+    if request.method == 'POST':
+        yearFilter = request.POST['yearFilter']   
+        projectListQuery = customerPaymentAccount.objects.values(year = TruncYear('transactionDate') , month = TruncMonth('transactionDate')).annotate(TDebit = Sum('debit') ,TCredit = Sum('credit') , TCount = Count('credit')).filter(transactionDate__year = yearFilter).order_by('-month')
+
+        context = {'projectListQuery':projectListQuery}
+        return render(request,'CRM/MonthlyReport.html',context)
+    else:
+        projectListQuery = customerPaymentAccount.objects.values(year = TruncYear('transactionDate') , month = TruncMonth('transactionDate')).annotate(TDebit = Sum('debit') ,TCredit = Sum('credit') , TCount = Count('credit')).order_by('-month')
+        context = {'projectListQuery':projectListQuery}
+        return render(request,'CRM/MonthlyReport.html',context)

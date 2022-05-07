@@ -1,0 +1,53 @@
+{% include 'CRM/base.html' %}
+{% include 'CRM/navbar.html' %}
+{% load humanize %}
+
+{% block content %}
+
+<br>
+
+
+
+<div class="container-lg">
+  
+    <h2 style="color: rgb(0, 0, 0); font-family: Georgia, 'Times New Roman', Times, serif; "> Credit / Debit Monthly Report</h2>
+
+    <form class="row g-3" method="post">
+      {% csrf_token %}
+      <div class="col-auto">
+        <label class="form-control-plaintext"> Filter by Year</label>
+      </div>
+      <div class="col-auto">
+        <label for="inputYear" class="visually-hidden">Year</label>
+        <input type="search" class="form-control" id="inputYear" name="yearFilter" required placeholder="Year">
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">Search</button>
+      </div>
+    </form>
+<table style="border-style: dotted;" class="table table-bordered">
+    <thead>
+      <tr>
+        <th  scope="col" class="text-center" >Year</th>
+        <th scope="col" class="text-center">Month</th>
+        <th scope="col" class="text-center">Total Credit</th>
+        <th scope="col" class="text-center">Total Debit</th>
+        <th scope="col" class="text-center">Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in projectListQuery %}
+      <tr >   
+        <td align ="center" >{{x.year|date:"Y"}}</td>
+        <td>{{x.month|date:"F"}}</td>
+        <td align ="right">{{x.TCredit|intcomma}}</td>
+        <td align ="right">{{x.TDebit|intcomma}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+{% endblock %}

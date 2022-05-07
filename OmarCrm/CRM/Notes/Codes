@@ -1,0 +1,33 @@
+Search Code :
+___________________
+
+    if request.method == 'POST':
+        fromdate = request.POST['fromdate']
+        todate = request.POST['todate']
+        queryset = customerPaymentAccount.objects.filter(transactionDate__gte=fromdate,transactionDate__lte=todate,studentId=pk)
+
+        context = {'queryset':queryset}
+        return render(request,'student/soa.html',context)
+
+    else:
+        showresult = customerPaymentAccount.objects.filter(studentId=pk)
+        context = {'queryset':queryset,'customerName':customerName,
+               'openBalance':openBalance , 'totalCredit':totalCredit , 'totalDebit':totalDebit,'showresult':showresult}
+        return render(request,'student/soa.html',context)
+
+Search html :
+__________________
+<form method="POST">
+  {% csrf_token %}
+From : <input type="date" name="fromdate" id="start" value="" required> 
+<script>
+    var today = new Date();
+    document.getElementById("start").value = new Date(today.getFullYear(),today.getMonth(),).toISOString().slice(0,10);
+  </script>
+To : <input type="date" name="todate" id="end" required>
+<script>
+  document.getElementById("end").value = new Date(today.getFullYear(),today.getMonth()+1).toISOString().slice(0, 10);
+</script>
+ <input type="submit" value="search" name="" id="">
+
+</div>
