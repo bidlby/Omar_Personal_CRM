@@ -1,5 +1,6 @@
 {% include 'CRM/base.html' %}
 {% include 'CRM/navbar.html' %}
+{% load humanize %}
 
 {% block content %}
 
@@ -8,7 +9,7 @@
 
 
 <div class="container-lg">
-    <h2 style="color: rgb(0, 0, 0); font-family: Georgia, 'Times New Roman', Times, serif; "> Active Projects List</h2>
+    <h2 style="color: rgb(0, 0, 0); font-family: Georgia, 'Times New Roman', Times, serif; "> Closed Projects List</h2>
 <table style="border-style: dotted;" class="table table-bordered">
     <thead>
       <tr>
@@ -32,11 +33,11 @@
         <td>{{x.2}}</td>
         <td>{{x.3}}</td>
         {% if x.4 == Null %} <td style="color: green; font-family: 'Courier New', Courier, monospace;">On Going</td> {% else %} <td>{{x.4}}</td> {% endif %}
-        <td>{{x.5}}</td>
-        {% if x.6 == True %} <td>Yes</td> {% else %} <td>No</td> {% endif %}
-        <td>{{x.7}}</td>
-        <td><button class="btn btn-secondery"><a href="/updateProject/{{x.0}}">Update</a></button></td>
-        <td><button class="btn btn-secondery"><a href="/NewComment/{{x.0}}">View</a></button></td>
+        <td align="right">{{x.5|intcomma}}</td>
+        {% if x.6 == True %} <td align="center">Yes</td> {% else %} <td align="center">No</td> {% endif %}
+        <td align="center">{{x.7}}</td>
+        <td align="center"><button class="btn btn-secondery"><a href="/updateProject/{{x.0}}">Update</a></button></td>
+        <td align="center"><button class="btn btn-secondery"><a href="/NewComment/{{x.0}}">View</a></button></td>
       </tr>
       {% endfor %}
     </tbody>

@@ -1,6 +1,6 @@
 {% include 'CRM/base.html' %}
 {% include 'CRM/navbar.html' %}
-
+{% load humanize %}
 {% block content %}
 
 <br>
@@ -27,7 +27,7 @@
         <td>{{x.customerId}}</td>
         <td>{{x.transactionDate}}</td>
         <td>{{x.paymentType}}</td>
-        <td>{{x.paymentAmount}} {{x.Currency}}</td>
+        <td>{{x.paymentAmount|intcomma}} {{x.Currency}}</td>
         <td>{{x.createdBy}}</td>
         <td ><a href="NewPayment">update</a> <a href="deletePayment/{{x.transactionId}}">delete</a></td>
 
