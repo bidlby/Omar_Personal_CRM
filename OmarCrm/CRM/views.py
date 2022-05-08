@@ -123,8 +123,16 @@ class updateCustomerProfile(LoginRequiredMixin,UpdateView):
 class AssignPojectView(LoginRequiredMixin,CreateView):
     template_name = 'CRM/AssignProject.html'
     form_class = assignProjectForm
+
     model = assignProjectModel
     success_url = '/customerList'
+
+    def get_form(self, *args, **kwargs):
+        form = super(AssignPojectView, self).get_form(*args, **kwargs)
+        filter = assignProjectModel.objects.values('projectId_id')
+        OpenProject = ProjectInfoModel.objects.exclude(projectId__in = filter)
+        form.fields['projectId'].queryset = ProjectInfoModel.objects.filter(projectId__in = OpenProject)
+        return form
 
     def form_valid(self, form):
         form.instance.createdBy = self.request.user
@@ -262,3 +270,17 @@ def projectMonthlyReport (request):
         projectListQuery = customerPaymentAccount.objects.values(year = TruncYear('transactionDate') , month = TruncMonth('transactionDate')).annotate(TDebit = Sum('debit') ,TCredit = Sum('credit') , TCount = Count('credit')).order_by('-month')
         context = {'projectListQuery':projectListQuery}
         return render(request,'CRM/MonthlyReport.html',context)
+
+
+### Test :
+
+def testView2(request):
+
+    filter = assignProjectModel.objects.values('projectId_id')
+    OpenProject = ProjectInfoModel.objects.exclude(projectId__in = filter)
+
+    #filter(product=product, preparation__id__not_in=preparations)
+    context = {'Q1':OpenProject}
+
+
+    return render(request,'CRM/ZTest.html',context)

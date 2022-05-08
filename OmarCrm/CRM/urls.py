@@ -45,6 +45,7 @@ urlpatterns = [
     path('financeClosedBalance', views.financeBalance ,name='financeClosedBalance'),
     path('CustomerBalance/<int:pk>', views.CustomerAccountBalance ,name='CustomerBalance'),
     path('PRMonthly', views.projectMonthlyReport ,name='PRMonthly'),
+    path('testView2', views.testView2 ,name='testView2'),
 
 
 
