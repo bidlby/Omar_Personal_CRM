@@ -115,7 +115,8 @@ class paymentsModel(models.Model):
 
     payType = [
             ('Card', 'Card'),
-            ('Cash', 'Cash')
+            ('Cash', 'Cash'),
+            ('Transfer', 'Bank Transfer'),
             ]
     
     currency = [
